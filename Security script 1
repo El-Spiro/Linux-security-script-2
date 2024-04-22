@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Define function to get current snapshot file path
+get_current_snapshot() {
+    local CURRENT_SNAPSHOT="/var/log/current_snapshot.log"
+    if [ ! -f "$CURRENT_SNAPSHOT" ]; then
+        touch "$CURRENT_SNAPSHOT"  # Create the file if it doesn't exist
+    fi
+    echo "$CURRENT_SNAPSHOT"
+}
+
+# Define other file paths
+PREVIOUS_SNAPSHOT="/var/log/previous_snapshot.log"
+DIFF_LOG="/var/log/user_changes.log"
+
+# Get current snapshot file path
+CURRENT_SNAPSHOT=$(get_current_snapshot)
+
+# Take a snapshot of user accounts
+echo "User Snapshot: $(date +'%Y-%m-%d %H:%M:%S')" > "$CURRENT_SNAPSHOT"
+echo >> "$CURRENT_SNAPSHOT"
+cat /etc/passwd >> "$CURRENT_SNAPSHOT"
+echo >> "$CURRENT_SNAPSHOT"
+
+# Compare with previous snapshot
+if [ -f "$PREVIOUS_SNAPSHOT" ]; then
+    diff "$PREVIOUS_SNAPSHOT" "$CURRENT_SNAPSHOT" > "$DIFF_LOG"
+    if [ -s "$DIFF_LOG" ]; then
+        echo "Suspicious changes detected:"
+        cat "$DIFF_LOG"
+        # Log or notify about the changes
+    else
+        echo "No suspicious changes detected."
+    fi
+fi
+
+# Move current snapshot to previous snapshot for next comparison
+cp "$CURRENT_SNAPSHOT" "$PREVIOUS_SNAPSHOT"
