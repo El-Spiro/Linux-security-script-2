@@ -11,7 +11,7 @@ echo "Backing up /home/jason directory"
 cp -r /home/jason "$backup_dir"
 
 # Backup secure log file
-echo "Backing up secure log file..."
+echo "Backing up secure log file"
 cp /var/log/secure "$backup_dir"
 
 # Compress backup files
