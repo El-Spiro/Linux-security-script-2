@@ -1,18 +1,24 @@
 #!/bin/bash
 
-# Defined backup directory found in root
+# Define backup directory in the root directory
 backup_dir="/backup"
 
 # Create backup directory if it doesn't exist
-mkdir -p "$backup_dir"
+sudo mkdir -p "$backup_dir"
 
 # Define directories to backup
 directories=("/etc" "/home" "/root" "/var/log" "/usr/local/bin")
 
+# Current date
+current_date=$(date +'%Y-%m-%d')
+
 # Backup each directory
 for dir in "${directories[@]}"; do
-    echo "Backing up $dir"
-    tar -czf "$backup_dir/$(basename $dir).tar.gz" "$dir"
+    echo "Backing up $dir..."
+    sudo tar -czf "$backup_dir/$(basename $dir).tar.gz" "$dir"
 done
 
-echo "Backup complete."
+# Create a single tar.zip archive with the current date
+echo "Creating a single tar.zip archive..."
+sudo tar -czf "$backup_dir/backup_$current_date.tar.gz" -C "$backup_dir" .
+echo "Backup complete: backup_$current_date.tar.gz"
