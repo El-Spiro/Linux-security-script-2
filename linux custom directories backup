@@ -14,11 +14,11 @@ current_date=$(date +'%Y-%m-%d')
 
 # Backup each directory
 for dir in "${directories[@]}"; do
-    echo "Backing up $dir..."
+    echo "Backing up $dir"
     sudo tar -czf "$backup_dir/$(basename $dir).tar.gz" "$dir"
 done
 
 # Create a single tar.zip archive with the current date
-echo "Creating a single tar.zip archive..."
+echo "Creating a single tar.zip archive"
 sudo tar -czf "$backup_dir/backup_$current_date.tar.gz" -C "$backup_dir" .
 echo "Backup complete: backup_$current_date.tar.gz"
