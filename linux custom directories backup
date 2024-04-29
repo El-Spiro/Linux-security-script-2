@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Define backup directory
-backup_dir="/path/to/backup"
+# Defined backup directory found in root
+backup_dir="/backup"
 
 # Create backup directory if it doesn't exist
 mkdir -p "$backup_dir"
